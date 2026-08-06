@@ -91,6 +91,16 @@ dependencies = [
   "zstandard",
 ]
 
+[tool.uv]
+# torch pins nvidia-cudnn-cu1x exactly (==9.19.0.56 for torch 2.11.0), so pip cannot
+# upgrade cuDNN at all. Override it to pick up cuDNN fixes between torch releases.
+# Floor, not a pin, so it can never become a downgrade; <10 stays inside the
+# libcudnn.so.9 ABI. Markers are required -- an override replaces them wholesale.
+override-dependencies = [
+  "nvidia-cudnn-cu12>=9.24.0.43,<10; platform_system == 'Linux'",
+  "nvidia-cudnn-cu13>=9.24.0.43,<10; platform_system == 'Linux'",
+]
+
 [[tool.uv.index]]
 name = "pypi"
 url = "https://pypi.org/simple"
